@@ -5,6 +5,7 @@ export default config({
     kind: 'github',
     repo: 'Methedrone/igawo-astro',
   },
+  url: 'https://igawo.pl',
   ui: {
     brand: { name: 'igawo CMS' },
   },
