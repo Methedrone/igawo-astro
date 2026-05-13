@@ -72,9 +72,6 @@ export function translatePath(
   toLang: keyof typeof ui
 ): string {
   const normalizedPath = normalizePath(path);
-  if (fromLang === toLang) {
-    return getLocalizedPath(normalizedPath, toLang);
-  }
 
   // Strip source locale prefix
   const fromPrefix = `/${fromLang}`;
@@ -82,27 +79,8 @@ export function translatePath(
     ? normalizedPath.slice(fromPrefix.length) || '/'
     : normalizedPath;
 
-  // Step 1: Convert source path to PL (default) path
-  let plPath = withoutSourceLocale;
-  if (fromLang !== defaultLang) {
-    const toPlMap = slugTranslations[fromLang] as Record<string, string>;
-    plPath = toPlMap[withoutSourceLocale] ?? withoutSourceLocale;
-  }
-
-  // Step 2: Convert PL path to target language path
-  let targetPath = plPath;
-  if (toLang !== defaultLang) {
-    if (toLang === 'de') {
-      const deToPl = slugTranslations['de'] as Record<string, string>;
-      // Find which DE path maps to this PL path
-      targetPath = Object.entries(deToPl).find(([, pl]) => pl === plPath)?.[0] ?? plPath;
-    } else {
-      const plToTargetMap = slugTranslations[defaultLang] as Record<string, string>;
-      targetPath = plToTargetMap[plPath] ?? plPath;
-    }
-  }
-
-  return getLocalizedPath(targetPath, toLang);
+  // Use Polish slugs for all languages (files are named in Polish)
+  return getLocalizedPath(withoutSourceLocale, toLang);
 }
 
 export function useTranslations(lang: keyof typeof ui) {
