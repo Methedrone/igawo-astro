@@ -1,0 +1,250 @@
+---
+import { ANALYTICS_CONFIG, GA4_LOCALES, META_LOCALES } from '../config/analytics';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = 'pl' } = Astro.props;
+
+const { ga4, metaPixel, gsc } = ANALYTICS_CONFIG;
+const ga4Locale = GA4_LOCALES[lang] ?? 'pl_PL';
+const metaLocale = META_LOCALES[lang] ?? 'pl_PL';
+---
+
+{gsc.enabled && gsc.verificationCode && gsc.verificationCode !== 'xxx' && (
+  <meta name="google-site-verification" content={gsc.verificationCode} />
+)}
+
+{ga4.enabled && ga4.measurementId && ga4.measurementId.startsWith('G-') && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4.measurementId}`}></script>
+    <script is:inline define:vars={{ measurementId: ga4.measurementId, locale: ga4Locale }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', measurementId, {
+        send_page_view: true,
+        cookie_flags: 'SameSite=None;Secure',
+        language: locale,
+        page_language: locale,
+      });
+    </script>
+  </>
+)}
+
+{metaPixel.enabled && metaPixel.pixelId && metaPixel.pixelId !== 'xxx' && (
+  <>
+    <script is:inline define:vars={{ pixelId: metaPixel.pixelId, locale: metaLocale }}>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      `https://connect.facebook.net/${metaLocale}/fbevents.js`);
+      fbq('init', pixelId);
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+        src={`https://www.facebook.com/tr?id=${metaPixel.pixelId}&ev=PageView&noscript=1`}
+      />
+    </noscript>
+  </>
+)}
+
+{ANALYTICS_CONFIG.linkedInInsight.enabled && ANALYTICS_CONFIG.linkedInInsight.partnerId && ANALYTICS_CONFIG.linkedInInsight.partnerId !== 'xxx' && (
+  <>
+    <script is:inline define:vars={{ partnerId: ANALYTICS_CONFIG.linkedInInsight.partnerId }}>
+      _linkedin_partner_id = partnerId;
+      window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+      window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+      (function(l) {
+        if (!l) {
+          window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+          window.lintrk.q=[];
+        }
+        var s = document.getElementsByTagName("script")[0];
+        var b = document.createElement("script");
+        b.type = "text/javascript"; b.async = true;
+        b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+        s.parentNode.insertBefore(b, s);
+      })(window.lintrk);
+    </script>
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        style="display:none;"
+        alt=""
+        src={`https://px.ads.linkedin.com/collect/?pid=${ANALYTICS_CONFIG.linkedInInsight.partnerId}&fmt=gif`}
+      />
+    </noscript>
+  </>
+)}
+
+<script is:inline>
+  (function () {
+    'use strict';
+
+    function gtagEvent(name, params) {
+      if (typeof gtag === 'function') {
+        gtag('event', name, params || {});
+      }
+    }
+
+    function fbqEvent(name, params) {
+      if (typeof fbq === 'function') {
+        fbq('trackCustom', name, params || {});
+      }
+    }
+
+    function trackEvent(name, params) {
+      gtagEvent(name, params);
+      fbqEvent(name, params);
+    }
+
+    function getClosest(el, selector) {
+      while (el && el !== document.body) {
+        if (el.matches && el.matches(selector)) return el;
+        el = el.parentElement;
+      }
+      return null;
+    }
+
+    function getLabel(el) {
+      return el.getAttribute('aria-label')
+        || el.getAttribute('data-track-label')
+        || el.innerText?.trim()
+        || el.href
+        || 'unknown';
+    }
+
+    document.addEventListener('click', function (e) {
+      const link = getClosest(e.target, 'a[href]');
+      if (!link) return;
+
+      const href = link.getAttribute('href') || '';
+      const label = getLabel(link);
+      const isExternal = href.startsWith('http') && !href.includes(location.hostname);
+      const isTel = href.startsWith('tel:');
+      const isMail = href.startsWith('mailto:');
+      const isDownload = /\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar|csv)(\?.*)?$/i.test(href);
+
+      const customTrack = link.getAttribute('data-track');
+      const customLabel = link.getAttribute('data-track-label');
+
+      if (customTrack) {
+        trackEvent(customTrack, {
+          event_category: 'engagement',
+          event_label: customLabel || label,
+          link_url: href,
+          link_domain: isExternal ? new URL(href).hostname : location.hostname,
+        });
+        return;
+      }
+
+      if (isTel) {
+        trackEvent('tel_click', {
+          event_category: 'contact',
+          event_label: label,
+          phone_number: href.replace('tel:', ''),
+        });
+        return;
+      }
+
+      if (isMail) {
+        trackEvent('email_click', {
+          event_category: 'contact',
+          event_label: label,
+          email_address: href.replace('mailto:', '').split('?')[0],
+        });
+        return;
+      }
+
+      if (isDownload) {
+        trackEvent('file_download', {
+          event_category: 'engagement',
+          event_label: label,
+          file_name: href.split('/').pop(),
+          file_extension: href.split('.').pop()?.split('?')[0],
+          link_url: href,
+        });
+        return;
+      }
+
+      if (isExternal) {
+        trackEvent('outbound_link', {
+          event_category: 'engagement',
+          event_label: label,
+          link_url: href,
+          link_domain: new URL(href).hostname,
+        });
+        return;
+      }
+    });
+
+    document.addEventListener('submit', function (e) {
+      const form = e.target.closest('form');
+      if (!form) return;
+
+      const formId = form.id || form.getAttribute('name') || 'unnamed_form';
+      const formAction = form.getAttribute('action') || location.pathname;
+      const subjectField = form.querySelector('select[name="subject"]');
+      const subject = subjectField ? subjectField.value : '';
+
+      trackEvent('form_submit', {
+        event_category: 'conversion',
+        event_label: formId,
+        form_id: formId,
+        form_action: formAction,
+        form_subject: subject,
+        page_path: location.pathname,
+      });
+    });
+
+    // Scroll-depth tracking (25%, 50%, 75%, 90%)
+    const depthMarks = new Set();
+    function checkScrollDepth() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (docHeight <= 0) return;
+      const pct = Math.round((scrollTop / docHeight) * 100);
+      [25, 50, 75, 90].forEach(function (mark) {
+        if (pct >= mark && !depthMarks.has(mark)) {
+          depthMarks.add(mark);
+          trackEvent('scroll_depth', {
+            event_category: 'engagement',
+            event_label: String(mark) + '%',
+            depth: mark,
+            page_path: location.pathname,
+          });
+        }
+      });
+    }
+    let scrollTick = false;
+    window.addEventListener('scroll', function () {
+      if (!scrollTick) {
+        window.requestAnimationFrame(function () {
+          checkScrollDepth();
+          scrollTick = false;
+        });
+        scrollTick = true;
+      }
+    });
+
+    // Time-on-page buckets (30s, 60s, 120s, 300s)
+    [30, 60, 120, 300].forEach(function (seconds) {
+      setTimeout(function () {
+        trackEvent('time_on_page', {
+          event_category: 'engagement',
+          event_label: String(seconds) + 's',
+          time_seconds: seconds,
+          page_path: location.pathname,
+        });
+      }, seconds * 1000);
+    });
+  })();
+</script>

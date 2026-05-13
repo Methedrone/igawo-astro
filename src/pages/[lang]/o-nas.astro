@@ -1,0 +1,56 @@
+---
+export const prerender = true;
+import { getEntry, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { languages, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { breadcrumbSchema, organizationSchema } from '../../lib/schema';
+import AboutSection from '../../components/sections/AboutSection.astro';
+import TeamSection from '../../components/sections/TeamSection.astro';
+import CtaSection from '../../components/sections/CtaSection.astro';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const pageIdMap: Record<string, string> = {
+  pl: 'o-nas',
+  en: 'about',
+  de: 'ueber-uns',
+};
+const pageEntry = await getEntry('pages', pageIdMap[lang] ?? 'o-nas');
+const pageDesc = pageEntry?.data.description ?? t('meta.about.description');
+const { Content } = pageEntry ? await render(pageEntry) : { Content: null };
+
+const homePath = getLocalizedPath('/', lang);
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: t('nav.about') },
+  ], lang),
+  organizationSchema(lang),
+];
+---
+
+<Layout title={t('nav.about')} description={pageDesc} schemas={schemas}>
+  <div class="pt-32 md:pt-40 pb-16 section-padding">
+    <div class="container-wide">
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-stone-950 leading-none">{t('nav.about')}</h1>
+    </div>
+  </div>
+
+  {Content && (
+    <section class="pb-16 section-padding">
+      <div class="container-wide max-w-3xl">
+        <div class="prose prose-stone prose-lg leading-relaxed text-stone-600">
+          <Content />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <AboutSection lang={lang} />
+  <CtaSection lang={lang} />
+</Layout>

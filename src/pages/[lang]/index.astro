@@ -1,0 +1,58 @@
+---
+export const prerender = true;
+import { getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { languages, useTranslations } from '../../i18n/utils';
+import { organizationSchema, localBusinessSchema, websiteSchema } from '../../lib/schema';
+import Hero from '../../components/sections/Hero.astro';
+import ServicesBento from '../../components/sections/ServicesBento.astro';
+import AboutSection from '../../components/sections/AboutSection.astro';
+import ProcessSection from '../../components/sections/ProcessSection.astro';
+import TestimonialsSection from '../../components/sections/TestimonialsSection.astro';
+import PartnersSection from '../../components/sections/PartnersSection.astro';
+import ContactSection from '../../components/sections/ContactSection.astro';
+import DownloadsSection from '../../components/sections/DownloadsSection.astro';
+import FormsSection from '../../components/sections/FormsSection.astro';
+import CtaSection from '../../components/sections/CtaSection.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const pageIdMap: Record<string, string> = {
+  en: 'home',
+  de: 'startseite',
+};
+const pageEntry = await getEntry('pages', pageIdMap[lang] ?? 'home');
+const pageDesc = pageEntry?.data.description ?? t('meta.home.description');
+const ogImageMap: Record<string, string> = {
+  pl: '/images/og-pl.jpg',
+  en: '/images/og-en.jpg',
+  de: '/images/og-de.jpg',
+};
+const ogImage = ogImageMap[lang] ?? '/og-image.jpg';
+
+const schemas = [
+  organizationSchema(lang),
+  localBusinessSchema(lang),
+  websiteSchema(lang),
+];
+---
+
+<Layout title="" description={pageDesc} image={ogImage} schemas={schemas}>
+  <Hero lang={lang} />
+  <ServicesBento lang={lang} />
+  <ProcessSection lang={lang} />
+  <AboutSection lang={lang} />
+  <TestimonialsSection lang={lang} />
+  <PartnersSection lang={lang} />
+  <ContactSection lang={lang} />
+  <DownloadsSection lang={lang} />
+  <FormsSection lang={lang} />
+  <NewsletterSignup lang={lang} />
+  <CtaSection lang={lang} />
+</Layout>

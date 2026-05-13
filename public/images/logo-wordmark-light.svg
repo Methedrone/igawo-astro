@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="1024" height="320">
+  <g transform="translate(10, 0)">
+    <rect fill="#3D2B1F" x="0" y="28" width="24" height="60" rx="12" />
+    <circle fill="#C9A227" cx="12" cy="16" r="12" />
+  </g>
+  <text x="50" y="72" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="56" font-weight="600" fill="#3D2B1F" letter-spacing="-0.02em">igawo</text>
+</svg>

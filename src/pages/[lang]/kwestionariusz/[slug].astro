@@ -1,0 +1,79 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { languages, useTranslations, ui } from '../../../i18n/utils';
+import QuestionnaireForm from '../../../components/forms/QuestionnaireForm';
+import CtaSection from '../../../components/sections/CtaSection.astro';
+import { breadcrumbSchema } from '../../../lib/schema';
+
+const slugToType: Record<string, 'tax' | 'kindergeld' | 'soka'> = {
+  'rozliczeniowy': 'tax',
+  'tax-questionnaire': 'tax',
+  'steuerfragebogen': 'tax',
+  'kindergeld': 'kindergeld',
+  'soka-bau': 'soka',
+};
+
+const typeTitleKey: Record<string, keyof (typeof ui)['pl']> = {
+  tax: 'q.taxQuestionnaire.title',
+  kindergeld: 'q.kindergeld.title',
+  soka: 'q.soka.title',
+};
+
+const typeSubtitleKey: Record<string, keyof (typeof ui)['pl']> = {
+  tax: 'q.taxQuestionnaire.subtitle',
+  kindergeld: 'q.kindergeld.subtitle',
+  soka: 'q.soka.subtitle',
+};
+
+export function getStaticPaths() {
+  const slugs = {
+    pl: ['rozliczeniowy', 'kindergeld', 'soka-bau'],
+    en: ['tax-questionnaire', 'kindergeld', 'soka-bau'],
+    de: ['steuerfragebogen', 'kindergeld', 'soka-bau'],
+  };
+  const paths: { params: { lang: string; slug: string } }[] = [];
+  for (const lang of Object.keys(slugs)) {
+    for (const slug of slugs[lang as keyof typeof slugs]) {
+      paths.push({ params: { lang, slug } });
+    }
+  }
+  return paths;
+}
+
+const { lang, slug } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+const type = slugToType[slug] ?? 'tax';
+
+const title = t(typeTitleKey[type]);
+const subtitle = t(typeSubtitleKey[type]);
+
+const homePath = lang === 'pl' ? '/' : `/${lang}`;
+const qPath = lang === 'pl' ? '/kwestionariusze' : `/${lang}/kwestionariusze`;
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: t('nav.questionnaires'), item: qPath },
+    { name: title },
+  ], lang),
+];
+---
+
+<Layout title={title} description={subtitle} schemas={schemas}>
+  <div class="pt-32 md:pt-40 pb-16 section-padding">
+    <div class="container-wide max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-stone-950 leading-none">{title}</h1>
+      <p class="mt-4 text-lg text-stone-500 leading-relaxed">{subtitle}</p>
+    </div>
+  </div>
+
+  <section class="pb-32 md:pb-48 section-padding">
+    <div class="container-wide max-w-3xl">
+      <div class="glass-panel rounded-[2.5rem] p-8 md:p-12">
+        <QuestionnaireForm client:load lang={lang as 'pl' | 'en' | 'de'} type={type} />
+      </div>
+    </div>
+  </section>
+
+  <CtaSection lang={lang} />
+</Layout>

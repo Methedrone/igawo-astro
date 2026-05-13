@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect x="8" y="4" width="28" height="36" rx="3" fill="#3D2B1F"/>
+  <path d="M8 13h28M16 9h4" stroke="#C9A227" stroke-width="2" stroke-linecap="round"/>
+  <path d="M14 22h12M14 26h10M14 30h8" stroke="#F5F0E8" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="36" cy="36" r="8" fill="#C9A227"/>
+  <text x="36" y="40" text-anchor="middle" font-size="10" font-weight="700" fill="#3D2B1F" font-family="system-ui,sans-serif">NL</text>
+</svg>

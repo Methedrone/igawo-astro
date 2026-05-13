@@ -1,0 +1,75 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { useTranslations, getLangFromUrl, getLocalizedPath } from '../../i18n/utils';
+import { breadcrumbSchema } from '../../lib/schema';
+
+export const getStaticPaths = () => [
+  { params: { lang: 'pl' } },
+  { params: { lang: 'en' } },
+  { params: { lang: 'de' } },
+];
+
+const lang = Astro.params.lang as 'pl' | 'en' | 'de';
+const t = useTranslations(lang);
+
+const descriptions: Record<string, string> = {
+  pl: 'Przeszukaj całą zawartość strony igawo.pl',
+  en: 'Search all content on igawo.pl',
+  de: 'Durchsuchen Sie alle Inhalte auf igawo.pl',
+};
+
+const hints: Record<string, string> = {
+  pl: 'Wyszukiwarka przeszukuje wszystkie strony, usługi, pliki do pobrania, formularze i artykuły bloga.',
+  en: 'The search covers all pages, services, downloads, forms, and blog articles.',
+  de: 'Die Suche umfasst alle Seiten, Dienstleistungen, Downloads, Formulare und Blog-Artikel.',
+};
+
+const homePath = getLocalizedPath('/', lang);
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: t('nav.search') },
+  ], lang),
+];
+---
+
+<Layout
+  title={t('nav.search')}
+  description={descriptions[lang] || descriptions.en}
+  schemas={schemas}
+>
+  <section class="min-h-[60vh] flex flex-col items-center justify-center px-4 pt-32 pb-20">
+    <div class="max-w-xl w-full text-center">
+      <h1 class="text-3xl font-bold tracking-tight text-stone-900 mb-4">
+        {t('nav.search')}
+      </h1>
+      <p class="text-stone-500 mb-8">
+        {lang === 'de' ? 'Verwenden Sie das Tastaturkürzel' : 'Use the keyboard shortcut'}
+        <kbd class="px-2 py-1 bg-stone-100 rounded text-sm font-mono">{t('nav.searchShortcut')}</kbd>
+        {lang === 'de' ? 'von überall auf der Seite, um die Suche zu öffnen.' : 'from anywhere on the site to open search.'}
+      </p>
+      <div class="glass-panel rounded-2xl p-8 border border-white/40">
+        <div class="flex items-center gap-3 px-4 py-3 bg-stone-50 rounded-xl border border-stone-200">
+          <svg
+            class="w-5 h-5 text-stone-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <span class="text-stone-400 text-sm">{t('search.placeholder')}</span>
+          <span class="ml-auto text-xs text-stone-300 font-mono">{t('nav.searchShortcut')}</span>
+        </div>
+        <p class="mt-4 text-sm text-stone-400">
+          {hints[lang] || hints.en}
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

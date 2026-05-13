@@ -1,0 +1,222 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { languages, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { breadcrumbSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const title = t('terms.title');
+const description = t('terms.intro');
+
+const homePath = getLocalizedPath('/', lang);
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: title },
+  ], lang),
+];
+---
+
+<Layout title={title} description={description} schemas={schemas}>
+  <div class="min-h-[100dvh] pt-32 md:pt-40 pb-24 section-padding">
+    <div class="container-wide max-w-3xl">
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tighter text-stone-950 leading-none">
+        {title}
+      </h1>
+      <p class="mt-6 text-lg text-stone-500 leading-relaxed">
+        {description}
+      </p>
+
+      <div class="mt-16 space-y-12 text-stone-600 leading-relaxed">
+        {lang === 'pl' && (
+          <>
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">1. Postanowienia ogólne</h2>
+              <p>Niniejszy regulamin określa zasady korzystania z usług świadczonych przez igawo.pl. Korzystanie z usług oznacza akceptację niniejszego regulaminu.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">2. Zakres usług</h2>
+              <p>igawo.pl świadczy usługi z zakresu rozliczeń podatkowych za granicą, w tym:</p>
+              <ul class="mt-3 space-y-2 list-disc list-inside">
+                <li>Rozliczenia podatkowe z Niemiec</li>
+                <li>Rozliczenia podatkowe z Holandii</li>
+                <li>Usługi Kindergeld</li>
+                <li>Upadłość konsumencka</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">3. Zawarcie umowy</h2>
+              <p>Umowa zostaje zawarta po akceptacji oferty przez klienta i przekazaniu niezbędnych dokumentów. Dokładny zakres usług oraz wynagrodzenie określa indywidualna umowa.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">4. Obowiązki klienta</h2>
+              <p>Klient zobowiązuje się do:</p>
+              <ul class="mt-3 space-y-2 list-disc list-inside">
+                <li>Podawania prawdziwych i kompletnych danych</li>
+                <li>Dostarczenia wymaganej dokumentacji</li>
+                <li>Terminowego uiszczania należności</li>
+                <li>Współpracy w trakcie realizacji usługi</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">5. Ceny i płatności</h2>
+              <p>Ceny usług są podane w cenniku dostępnym na stronie lub w indywidualnej ofercie. Płatności dokonywane są na podstawie faktury VAT. W przypadku niektórych usług obowiązuje model "no win, no fee" — szczegóły określa umowa.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">6. Reklamacje</h2>
+              <p>Reklamacje mogą być składane drogą mailową na adres igawo14@gmail.com w ciągu 14 dni od zakończenia usługi. Rozpatrujemy je w terminie do 30 dni.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">7. Odpowiedzialność</h2>
+              <p>igawo.pl ponosi odpowiedzialność za szkody wyrządzone z winy umyślnej lub rażącego niedbalstwa. Nie ponosimy odpowiedzialności za decyzje organów podatkowych.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">8. Poufność</h2>
+              <p>Wszystkie dane klientów traktowane są jako poufne i chronione zgodnie z RODO. Szczegóły znajdują się w Polityce Prywatności.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">9. Postanowienia końcowe</h2>
+              <p>Regulamin obowiązuje od dnia opublikowania na stronie. Zastrzegamy sobie prawo do zmiany regulaminu — klient zostanie poinformowany o zmianach drogą mailową.</p>
+            </section>
+          </>
+        )}
+
+        {lang === 'en' && (
+          <>
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">1. General provisions</h2>
+              <p>These terms define the rules for using services provided by igawo.pl. Using our services implies acceptance of these terms.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">2. Scope of services</h2>
+              <p>igawo.pl provides foreign tax return services, including:</p>
+              <ul class="mt-3 space-y-2 list-disc list-inside">
+                <li>German tax returns</li>
+                <li>Dutch tax returns</li>
+                <li>Kindergeld services</li>
+                <li>Consumer bankruptcy</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">3. Contract conclusion</h2>
+              <p>The contract is concluded after the client accepts the offer and provides the necessary documents. The exact scope of services and remuneration are defined in the individual agreement.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">4. Client obligations</h2>
+              <p>The client undertakes to:</p>
+              <ul class="mt-3 space-y-2 list-disc list-inside">
+                <li>Provide true and complete data</li>
+                <li>Submit required documentation</li>
+                <li>Make timely payments</li>
+                <li>Cooperate during service delivery</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">5. Prices and payments</h2>
+              <p>Service prices are listed in the pricing available on the website or in the individual offer. Payments are made based on a VAT invoice. For some services, a "no win, no fee" model applies — details are specified in the agreement.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">6. Complaints</h2>
+              <p>Complaints may be submitted by email to igawo14@gmail.com within 14 days of service completion. We review them within 30 days.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">7. Liability</h2>
+              <p>igawo.pl is liable for damages caused by intent or gross negligence. We are not liable for decisions made by tax authorities.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">8. Confidentiality</h2>
+              <p>All client data is treated as confidential and protected in accordance with GDPR. Details can be found in the Privacy Policy.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">9. Final provisions</h2>
+              <p>These terms are effective from the date of publication on the website. We reserve the right to amend the terms — clients will be notified of changes by email.</p>
+            </section>
+          </>
+        )}
+
+        {lang === 'de' && (
+          <>
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">1. Allgemeine Bestimmungen</h2>
+              <p>Diese AGB legen die Regeln für die Nutzung der von igawo.pl erbrachten Dienstleistungen fest. Die Nutzung unserer Dienstleistungen bedeutet die Akzeptanz dieser AGB.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">2. Leistungsumfang</h2>
+              <p>igawo.pl erbringt Dienstleistungen im Bereich ausländischer Steuererklärungen, einschließlich:</p>
+              <ul class="mt-3 space-y-2 list-disc list-inside">
+                <li>Deutsche Steuererklärungen</li>
+                <li>Niederländische Steuererklärungen</li>
+                <li>Kindergeld-Dienstleistungen</li>
+                <li>Verbraucherinsolvenz</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">3. Vertragsschluss</h2>
+              <p>Der Vertrag kommt zustande, nachdem der Kunde das Angebot akzeptiert und die erforderlichen Unterlagen übermittelt hat. Der genaue Leistungsumfang und die Vergütung werden in der individuellen Vereinbarung festgelegt.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">4. Pflichten des Kunden</h2>
+              <p>Der Kunde verpflichtet sich:</p>
+              <ul class="mt-3 space-y-2 list-disc list-inside">
+                <li>Wahre und vollständige Daten anzugeben</li>
+                <li>Erforderliche Unterlagen einzureichen</li>
+                <li>Zahlungen fristgerecht zu leisten</li>
+                <li>Während der Dienstleistungserbringung mitzuwirken</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">5. Preise und Zahlungen</h2>
+              <p>Die Preise für Dienstleistungen sind in der auf der Website verfügbaren Preisliste oder im individuellen Angebot angegeben. Zahlungen erfolgen auf Basis einer Mehrwertsteuerrechnung. Für einige Dienstleistungen gilt ein „no win, no fee“-Modell — Details sind in der Vereinbarung festgelegt.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">6. Beschwerden</h2>
+              <p>Beschwerden können per E-Mail an igawo14@gmail.com innerhalb von 14 Tagen nach Dienstleistungsende eingereicht werden. Wir prüfen sie innerhalb von 30 Tagen.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">7. Haftung</h2>
+              <p>igawo.pl haftet für Schäden, die durch Vorsatz oder grobe Fahrlässigkeit verursacht wurden. Wir haften nicht für Entscheidungen der Finanzbehörden.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">8. Vertraulichkeit</h2>
+              <p>Alle Kundendaten werden als vertraulich behandelt und gemäß DSGVO geschützt. Details finden Sie in der Datenschutzerklärung.</p>
+            </section>
+
+            <section>
+              <h2 class="text-2xl font-bold text-stone-900 tracking-tight mb-4">9. Schlussbestimmungen</h2>
+              <p>Diese AGB gelten ab dem Tag der Veröffentlichung auf der Website. Wir behalten uns das Recht vor, die AGB zu ändern — Kunden werden per E-Mail über Änderungen informiert.</p>
+            </section>
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+</Layout>

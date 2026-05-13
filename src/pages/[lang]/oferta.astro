@@ -1,0 +1,67 @@
+---
+export const prerender = true;
+import { getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { languages, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { getCollection } from 'astro:content';
+import { breadcrumbSchema, serviceSchema, BUSINESS } from '../../lib/schema';
+import ServicesBento from '../../components/sections/ServicesBento.astro';
+import ProcessSection from '../../components/sections/ProcessSection.astro';
+import CtaSection from '../../components/sections/CtaSection.astro';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const pageIdMap: Record<string, string> = {
+  pl: 'oferta',
+  en: 'services',
+  de: 'angebot',
+};
+const pageEntry = await getEntry('pages', pageIdMap[lang] ?? 'oferta');
+const pageDesc = pageEntry?.data.description ?? t('meta.services.description');
+
+const allServices = await getCollection('services');
+const services = allServices
+  .filter((s) => {
+    const id = s.id;
+    if (lang === 'pl') return !id.endsWith('-en') && !id.endsWith('-de');
+    if (lang === 'en') return id.endsWith('-en');
+    if (lang === 'de') return id.endsWith('-de');
+    return true;
+  });
+
+const homePath = getLocalizedPath('/', lang);
+const currentPath = getLocalizedPath('/oferta', lang);
+
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: t('nav.services') },
+  ], lang),
+  ...services.map((s) =>
+    serviceSchema(
+      {
+        title: s.data.title.name,
+        description: s.data.description,
+        url: `${BUSINESS.url}${currentPath}#${s.data.title.slug}`,
+      },
+      lang
+    )
+  ),
+];
+---
+
+<Layout title={t('nav.services')} description={pageDesc} schemas={schemas}>
+  <div class="pt-32 md:pt-40 pb-16 section-padding">
+    <div class="container-wide">
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-stone-950 leading-none">{t('nav.services')}</h1>
+    </div>
+  </div>
+  <ServicesBento lang={lang} />
+  <ProcessSection lang={lang} />
+  <CtaSection lang={lang} />
+</Layout>

@@ -1,0 +1,223 @@
+---
+import { languages, getLangFromUrl, useTranslations, getLocalizedPath, translatePath } from '../i18n/utils';
+import SearchTrigger from './SearchTrigger';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: getLocalizedPath('/', lang), label: t('nav.home') },
+  { href: getLocalizedPath('/o-nas', lang), label: t('nav.about') },
+  { href: getLocalizedPath('/oferta', lang), label: t('nav.services') },
+  { href: getLocalizedPath('/cennik', lang), label: t('nav.pricing') },
+  { href: getLocalizedPath('/pliki', lang), label: t('nav.downloads') },
+  { href: getLocalizedPath('/kwestionariusze', lang), label: t('nav.forms') },
+  { href: getLocalizedPath('/faq', lang), label: t('nav.faq') },
+  { href: getLocalizedPath('/kontakt', lang), label: t('nav.contact') },
+];
+
+const langNames: Record<string, string> = { pl: 'PL', en: 'EN', de: 'DE' };
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="glass-pill rounded-full px-2 py-2 pr-4 flex items-center justify-between">
+      <a
+        href={getLocalizedPath('/', lang)}
+        class="pl-5 pr-4 text-lg font-bold tracking-tight text-stone-900 hover:text-brand-700 transition-colors"
+        aria-label="igawo.pl home"
+      >
+        igawo.pl
+      </a>
+
+      <nav class="hidden md:flex items-center gap-0.5" aria-label={t('nav.main')}>
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class={`relative px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
+              currentPath === item.href || currentPath === item.href + '/'
+                ? 'text-stone-900'
+                : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100/50'
+            }`}
+            aria-current={currentPath === item.href || currentPath === item.href + '/' ? 'page' : undefined}
+          >
+            {item.label}
+            {(currentPath === item.href || currentPath === item.href + '/') && (
+              <span class="absolute inset-0 bg-stone-100 rounded-full -z-10" aria-hidden="true" />
+            )}
+          </a>
+        ))}
+      </nav>
+
+      <div class="flex items-center gap-1">
+        <SearchTrigger
+          client:load
+          lang={lang}
+          translations={{
+            'nav.search': t('nav.search'),
+            'nav.searchShortcut': t('nav.searchShortcut'),
+            'search.placeholder': t('search.placeholder'),
+            'search.noResults': t('search.noResults'),
+            'search.results': t('search.results'),
+            'search.result': t('search.result'),
+            'search.loading': t('search.loading'),
+            'search.error': t('search.error'),
+            'search.hint': t('search.hint'),
+            'search.close': t('search.close'),
+            'search.page': t('search.page'),
+            'search.blog': t('search.blog'),
+            'search.faq': t('search.faq'),
+            'search.service': t('search.service'),
+          }}
+        />
+
+        <div class="hidden sm:flex items-center bg-stone-100/60 rounded-full p-0.5" role="group" aria-label="Language switcher">
+          {Object.entries(languages).map(([code]) => {
+            const targetPath = translatePath(currentPath, lang, code as keyof typeof languages);
+            return (
+              <a
+                href={targetPath}
+                class={`text-xs font-semibold px-2.5 py-1 rounded-full transition-all ${
+                  lang === code
+                    ? 'bg-white text-stone-900 shadow-sm'
+                    : 'text-stone-400 hover:text-stone-600'
+                }`}
+                aria-label={`Switch to ${code}`}
+                aria-current={lang === code ? 'true' : undefined}
+              >
+                {langNames[code]}
+              </a>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          class="md:hidden p-2 rounded-full text-stone-600 hover:bg-stone-100 transition-colors"
+          aria-label={t('nav.toggle')}
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          id="mobile-menu-btn"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path d="M224 128a8 8 0 0 1-8 8H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8ZM40 72h176a8 8 0 0 0 0-16H40a8 8 0 0 0 0 16Zm176 112H40a8 8 0 0 0 0 16h176a8 8 0 0 0 0-16Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden mt-2 mx-auto max-w-7xl glass-pill rounded-2xl p-4"
+  >
+    <nav class="flex flex-col gap-1" aria-label={t('nav.main')}>
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class={`px-4 py-2.5 text-sm font-medium rounded-xl transition-colors ${
+            currentPath === item.href
+              ? 'bg-stone-100 text-stone-900'
+              : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+          }`}
+          aria-current={currentPath === item.href ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <div class="mt-3 pt-3 border-t border-stone-200/50 flex items-center gap-2 px-4">
+      <span class="text-xs text-stone-400 font-medium">Language:</span>
+      <div class="flex items-center gap-1">
+        {Object.entries(languages).map(([code]) => {
+          const targetPath = translatePath(currentPath, lang, code as keyof typeof languages);
+          return (
+            <a
+              href={targetPath}
+              class={`text-xs font-semibold px-2 py-1 rounded-full transition-all ${
+                lang === code
+                  ? 'bg-stone-900 text-white'
+                  : 'text-stone-500 hover:bg-stone-100'
+              }`}
+            >
+              {langNames[code]}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  (function() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
+
+    const focusableSelector = 'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])';
+    let lastFocusedElement: Element | null = null;
+
+    function getFocusableElements() {
+      return Array.from(menu.querySelectorAll(focusableSelector)).filter(
+        (el) => !el.hasAttribute('disabled') && !el.getAttribute('aria-hidden')
+      ) as HTMLElement[];
+    }
+
+    function trapFocus(e: KeyboardEvent) {
+      if (e.key !== 'Tab') return;
+      const focusable = getFocusableElements();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function openMenu() {
+      lastFocusedElement = document.activeElement;
+      menu.classList.remove('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      document.addEventListener('keydown', handleKeyDown);
+      const focusable = getFocusableElements();
+      if (focusable.length > 0) focusable[0].focus();
+    }
+
+    function closeMenu() {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', handleKeyDown);
+      if (lastFocusedElement && lastFocusedElement instanceof HTMLElement) {
+        lastFocusedElement.focus();
+      }
+    }
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        closeMenu();
+        return;
+      }
+      trapFocus(e);
+    }
+
+    btn.addEventListener('click', () => {
+      if (menu.classList.contains('hidden')) {
+        openMenu();
+      } else {
+        closeMenu();
+      }
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        closeMenu();
+      });
+    });
+  })();
+</script>

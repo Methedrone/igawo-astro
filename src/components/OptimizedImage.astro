@@ -1,0 +1,45 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+  decoding?: 'async' | 'sync' | 'auto';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  width?: number;
+  height?: number;
+}
+
+const {
+  src,
+  alt,
+  class: className = '',
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority = 'auto',
+  width,
+  height,
+} = Astro.props;
+
+// Generate paths for modern format fallbacks
+// Assumes public/ images with .jpg/.png may have .avif and .webp variants
+const basePath = src.replace(/\.(jpg|jpeg|png|webp|avif)$/, '');
+const avifSrc = `${basePath}.avif`;
+const webpSrc = `${basePath}.webp`;
+const fallbackSrc = src;
+---
+
+<picture>
+  <source srcset={avifSrc} type="image/avif" />
+  <source srcset={webpSrc} type="image/webp" />
+  <img
+    src={fallbackSrc}
+    alt={alt}
+    class={className}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+    width={width}
+    height={height}
+  />
+</picture>

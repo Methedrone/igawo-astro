@@ -1,0 +1,493 @@
+{
+  "audit_meta": {
+    "source_project": "/home/m/Work/Iza-Strona",
+    "theme": "igawo-theme",
+    "cms": "WordPress 6.7+ FSE Block Theme",
+    "audited_at": "2026-05-13",
+    "extracted_from": [
+      "themes/igawo-theme/theme.json",
+      "themes/igawo-theme/style.css",
+      "themes/igawo-theme/functions.php",
+      "themes/igawo-theme/patterns/*.php",
+      "themes/igawo-theme/templates/*.html",
+      "design-extract-output/podatki-help-design-tokens.json",
+      "naprawa-plan.md"
+    ]
+  },
+  "site_structure": {
+    "homepage": {
+      "template": "front-page.html",
+      "sections_in_order": [
+        "header (template-part)",
+        "hero (igawo/hero)",
+        "trust-bar (igawo/trust-bar)",
+        "services (igawo/services)",
+        "about (igawo/about)",
+        "process (igawo/process)",
+        "testimonials (igawo/testimonials)",
+        "contact (igawo/contact)",
+        "pricing-cta (igawo/pricing-cta)",
+        "footer (template-part)"
+      ]
+    },
+    "pages": [
+      {
+        "slug": "/",
+        "title": "Strona główna",
+        "template": "front-page.html",
+        "notes": "Używa front-page.html, pusta strona WP (ID 7)"
+      },
+      {
+        "slug": "/rozliczenie-z-niemiec/",
+        "title": "Rozliczenie z Niemiec",
+        "template": "page.html",
+        "notes": "ID 8"
+      },
+      {
+        "slug": "/rozliczenie-z-holandii/",
+        "title": "Rozliczenie z Holandii",
+        "template": "page.html",
+        "notes": "ID 9"
+      },
+      {
+        "slug": "/kindergeld/",
+        "title": "Kindergeld",
+        "template": "page.html",
+        "notes": "ID 10"
+      },
+      {
+        "slug": "/soka-bau/",
+        "title": "SOKA-BAU",
+        "template": "page.html",
+        "notes": "ID 11"
+      },
+      {
+        "slug": "/upadlosc/",
+        "title": "Upadłość",
+        "template": "page.html",
+        "notes": "ID 12"
+      },
+      {
+        "slug": "/kontakt/",
+        "title": "Kontakt",
+        "template": "page.html",
+        "notes": "ID 15, zawiera formularz Contact Form 7"
+      },
+      {
+        "slug": "/cennik/",
+        "title": "Cennik",
+        "template": "page.html",
+        "notes": "ID 16"
+      },
+      {
+        "slug": "/o-nas/",
+        "title": "O nas",
+        "template": "page.html",
+        "notes": "ID 17"
+      },
+      {
+        "slug": "/polityka-prywatnosci",
+        "title": "Polityka prywatności",
+        "template": "page.html",
+        "notes": "ID 3"
+      },
+      {
+        "slug": "/rodo",
+        "title": "RODO",
+        "template": "page.html",
+        "notes": "ID 45"
+      },
+      {
+        "slug": "/impressum",
+        "title": "Impressum",
+        "template": "page.html",
+        "notes": "ID 46"
+      }
+    ],
+    "templates": [
+      "index.html",
+      "page.html",
+      "single.html",
+      "archive.html",
+      "search.html",
+      "404.html",
+      "front-page.html"
+    ],
+    "pattern_slugs": [
+      "igawo/hero",
+      "igawo/trust-bar",
+      "igawo/services",
+      "igawo/about",
+      "igawo/process",
+      "igawo/testimonials",
+      "igawo/contact",
+      "igawo/pricing-cta",
+      "igawo/header",
+      "igawo/footer",
+      "igawo/404-content",
+      "igawo/page-content",
+      "igawo/index-content",
+      "igawo/single-content",
+      "igawo/archive-loop",
+      "igawo/search-content"
+    ]
+  },
+  "content_sections": {
+    "oferta": {
+      "section_title": "Ekspertyza — Rozwiązania dopasowane do Twoich spraw zagranicznych",
+      "services": [
+        {
+          "name": "Rozliczenie z Niemiec",
+          "slug": "/rozliczenie-z-niemiec/",
+          "description": "Kompletne przygotowanie deklaracji, ulgi rodzinne i korekty wcześniejszych rozliczeń w oparciu o aktualne orzecznictwo BFH.",
+          "image": "service-germany.png"
+        },
+        {
+          "name": "Rozliczenie z Holandii",
+          "slug": "/rozliczenie-z-holandii/",
+          "description": "Wsparcie od pierwszego dokumentu po ostateczną decyzję Belastingdienst i optymalizację zwrotu.",
+          "image": "service-holland.png"
+        },
+        {
+          "name": "Kindergeld",
+          "slug": "/kindergeld/",
+          "description": "Prowadzenie wniosków rodzinnych i profesjonalna komunikacja z Familienkasse."
+        },
+        {
+          "name": "SOKA-BAU",
+          "slug": "/soka-bau/",
+          "description": "Obsługa świadczeń urlopowych i dokumentacji w branży budowlanej (Urlaubs- und Lohnausgleichskasse)."
+        },
+        {
+          "name": "Upadłość",
+          "slug": "/upadlosc/",
+          "description": "Strategia oddłużeniowa i wsparcie w procedurze upadłościowej (Insolvenzverfahren)."
+        }
+      ]
+    },
+    "o_nas": {
+      "section_title": "Poznajmy się — Osobiste wsparcie w świecie finansów",
+      "headline": "Osobiste wsparcie w świecie finansów",
+      "eyebrow": "Poznajmy się",
+      "body_paragraphs": [
+        "Nazywam się Izabela Gawłowska-Wolak i od lat pomagam polskim przedsiębiorcom oraz pracownikom odnaleźć się w gąszczu przepisów podatkowych Niemiec i Holandii. Moim celem jest nie tylko poprawne rozliczenie, ale przede wszystkim spokój ducha moich klientów.",
+        "Specjalizuję się w trudnych przypadkach – od odzyskiwania składek SOKA-BAU, przez zasiłki Kindergeld, aż po kompleksowe doradztwo w procesach upadłości konsumenckiej. Wierzę, że za każdą sprawą stoi człowiek, dlatego do każdego zlecenia podchodzę z pełnym zaangażowaniem i empatią."
+      ],
+      "cta": {
+        "text": "Poznajmy się lepiej",
+        "href": "/kontakt/"
+      },
+      "portrait_image": "izabela-portrait.png"
+    },
+    "kontakt": {
+      "section_title": "Kontakt — Porozmawiajmy o Twojej sprawie",
+      "headline": "Porozmawiajmy o Twojej sprawie.",
+      "body": "Wypełnij formularz lub skontaktuj się telefonicznie. Odpowiadamy konkretnie i bez zbędnej zwłoki.",
+      "contact_info": {
+        "telefon_pl": "+48 572 762 919",
+        "telefon_de": "+49 157 3140 1482",
+        "email": "biuro@igawo.pl"
+      },
+      "form": {
+        "plugin": "Contact Form 7",
+        "shortcode": "[contact-form-7 id=\"51\" title=\"Formularz Kontaktowy\"]",
+        "form_title": "Formularz zgłoszeniowy"
+      },
+      "privacy_note": "Twoje dane są bezpieczne i przetwarzane zgodnie z polityką prywatności."
+    },
+    "process": {
+      "section_title": "Metodologia — Proces przejrzysty na każdym etapie",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Konsultacja i Analiza",
+          "description": "Analizujemy Twoją sytuację i dokumenty podczas krótkiej rozmowy lub poprzez intuicyjny formularz online."
+        },
+        {
+          "number": "02",
+          "title": "Realizacja Formalności",
+          "description": "Przygotowujemy kompletne rozliczenie i wysyłamy je do odpowiedniego urzędu. Monitorujemy status Twojej sprawy dzień po dniu."
+        },
+        {
+          "number": "03",
+          "title": "Finalizacja i Zwrot",
+          "description": "Otrzymujesz decyzję podatkową i wypracowany przez nas zwrot bezpośrednio na swoje konto. Szybko, bezpiecznie i bez stresu."
+        }
+      ]
+    },
+    "testimonials": {
+      "section_title": "Referencje — Zaufanie poparte doświadczeniem",
+      "quotes": [
+        {
+          "text": "Pełen profesjonalizm i ogromna wiedza. Pani Izabela pomogła mi w trudnej sprawie z Kindergeld, którą inni uważali za beznadziejną.",
+          "author": "Marek Kowalski",
+          "role": "Klient indywidualny"
+        },
+        {
+          "text": "Najlepsza obsługa podatkowa z jaką miałem do czynienia. Wszystko wyjaśnione prosto i klarownie. Polecam każdemu pracującemu w Niemczech.",
+          "author": "Anna Nowak",
+          "role": "Klientka indywidualna"
+        }
+      ]
+    },
+    "trust_bar": {
+      "stats": [
+        { "label": "Ocena Google", "value": "5.0" },
+        { "label": "Lat doświadczenia", "value": "10" },
+        { "label": "Klientów", "value": "1200" }
+      ]
+    },
+    "hero": {
+      "eyebrow": "Ekspertka od zagranicznych rozliczeń",
+      "headline": "Rozliczenia podatkowe z Niemiec i Holandii bez chaosu formalności.",
+      "subheadline": "Łączymy precyzję ekspercką z ludzkim wsparciem. Prowadzimy Twoją sprawę od pierwszego dokumentu do finalnej decyzji urzędu.",
+      "ctas": [
+        { "text": "Umów konsultację", "href": "/kontakt/", "style": "pill" },
+        { "text": "Sprawdź cennik", "href": "/cennik/", "style": "ghost-gold" }
+      ],
+      "hero_image": "hero-primary.png"
+    },
+    "pricing_cta": {
+      "eyebrow": "Planowanie Finansowe",
+      "headline": "Potrzebujesz szybkiej wyceny i jasnych warunków współpracy?",
+      "body": "Zobacz orientacyjne stawki i wybierz dogodny sposób kontaktu. Odpowiadamy zwykle jeszcze tego samego dnia roboczego.",
+      "ctas": [
+        { "text": "Przejdź do cennika", "href": "/cennik/", "style": "pill" },
+        { "text": "Zapytaj o wycenę", "href": "/kontakt/", "style": "outline" }
+      ]
+    },
+    "pliki_do_pobrania": {
+      "status": "NOT_FOUND_IN_THEME",
+      "note": "Brak dedykowanego bloku/patternu 'Pliki do pobrania' w obecnym theme. Może istnieć jako treść strony WP lub na żywej stronie podatki.help."
+    },
+    "kwestionariusze": {
+      "status": "NOT_FOUND_IN_THEME",
+      "note": "Brak dedykowanego bloku/patternu 'Kwestionariusze' w obecnym theme. Formularz kontaktowy (CF7) istnieje w sekcji Kontakt."
+    }
+  },
+  "company_data": {
+    "name": "Izabela Gawłowska-Wolak",
+    "education": "Akademia Ekonomiczna w Katowicach",
+    "phones": {
+      "task_spec": {
+        "pl": "+48 570016826",
+        "de": "+49 15752666922"
+      },
+      "theme_current": {
+        "pl": "+48 572 762 919",
+        "de": "+49 157 3140 1482"
+      }
+    },
+    "emails": {
+      "task_spec": "igawo14@gmail.com",
+      "theme_current": "biuro@igawo.pl"
+    },
+    "website": "igawo.pl",
+    "social_media": {
+      "facebook": "# (placeholder)",
+      "linkedin": "# (placeholder)",
+      "instagram": "# (placeholder, nieaktywny)"
+    },
+    "legal": {
+      "privacy_policy": "/polityka-prywatnosci",
+      "impressum": "/impressum",
+      "rodo": "/rodo",
+      "service_type": "Usługi o charakterze administracyjnym i informacyjnym zgodnie z §87d AO."
+    }
+  },
+  "seo_keywords": {
+    "primary": [
+      "rozliczenie podatku z Niemiec",
+      "rozliczenie podatku z Holandii",
+      "podatki Niemcy",
+      "podatki Holandia",
+      "Kindergeld",
+      "SOKA-BAU",
+      "upadłość konsumencka Niemcy"
+    ],
+    "secondary": [
+      "zwrot podatku z Niemiec",
+      "zwrot podatku z Holandii",
+      "ulgi rodzinne Niemcy",
+      "Familienkasse",
+      "Belastingdienst",
+      "BFH orzecznictwo",
+      "Insolvenzverfahren",
+      "doradca podatkowy Polacy za granicą"
+    ],
+    "local": [
+      "podatki.help",
+      "igawo.pl",
+      "podatki za granicą",
+      "polski księgowy Niemcy",
+      "polski księgowy Holandia"
+    ],
+    "meta_description_from_theme": "Profesjonalne wsparcie w rozliczeniach podatkowych z Niemiec i Holandii. Ekspertka od Kindergeld, SOKA-BAU i upadłości konsumenckiej."
+  },
+  "design_tokens": {
+    "source": "theme.json v3 + style.css",
+    "aesthetic": "Editorial Luxury",
+    "color_mode": "light",
+    "colors_oklch": {
+      "base": {
+        "name": "Warm Base",
+        "oklch": "oklch(0.985 0.005 85)",
+        "usage": "page background"
+      },
+      "surface": {
+        "name": "Ivory Surface",
+        "oklch": "oklch(0.98 0.003 85)",
+        "usage": "card surfaces"
+      },
+      "contrast": {
+        "name": "Slate Ink",
+        "oklch": "oklch(0.18 0.01 70)",
+        "usage": "primary text"
+      },
+      "muted": {
+        "name": "Muted Text",
+        "oklch": "oklch(0.5 0.01 70)",
+        "usage": "secondary text"
+      },
+      "primary": {
+        "name": "Sophisticated Gold",
+        "oklch": "oklch(0.65 0.12 75)",
+        "usage": "CTAs, accents, highlights"
+      },
+      "primary_soft": {
+        "name": "Soft Gold",
+        "oklch": "oklch(0.92 0.04 80)",
+        "usage": "soft highlights, hover states"
+      },
+      "secondary": {
+        "name": "Midnight Blue",
+        "oklch": "oklch(0.32 0.05 245)",
+        "usage": "button hover, secondary accents"
+      },
+      "deep": {
+        "name": "Deep Overlay",
+        "oklch": "oklch(0.15 0.01 70)",
+        "usage": "footer background"
+      }
+    },
+    "legacy_colors_from_podatki_help": {
+      "primary": "#dea932",
+      "secondary": "#2f5aae",
+      "neutral_dark": "#272626",
+      "neutral_black": "#000000",
+      "neutral_grey": "#69727d",
+      "neutral_charcoal": "#494c4f",
+      "white": "#ffffff"
+    },
+    "typography": {
+      "display_font": {
+        "family": "Playfair Display",
+        "fallback": "serif",
+        "usage": "headings H1-H6"
+      },
+      "body_font": {
+        "family": "Geist",
+        "fallback": "sans-serif",
+        "weights": [400, 600, 700],
+        "usage": "body text, UI"
+      },
+      "legacy_body_font": "Montserrat (from podatki.help)",
+      "font_sizes": {
+        "xs": "0.75rem",
+        "sm": "0.875rem",
+        "base": "1.0625rem",
+        "md": "1.25rem",
+        "lg": "1.5rem",
+        "xl": "clamp(2rem, 5vw, 2.5rem)",
+        "display": "clamp(2.5rem, 8vw, 4.5rem)"
+      },
+      "line_height": {
+        "body": "1.7",
+        "headings": "1.15"
+      }
+    },
+    "spacing": {
+      "scale": [
+        { "slug": "1", "size": "4px" },
+        { "slug": "2", "size": "8px" },
+        { "slug": "3", "size": "12px" },
+        { "slug": "4", "size": "16px" },
+        { "slug": "5", "size": "clamp(1.25rem, 2vw, 1.5rem)" },
+        { "slug": "6", "size": "clamp(1.5rem, 3vw, 2rem)" },
+        { "slug": "7", "size": "clamp(2rem, 5vw, 3rem)" },
+        { "slug": "8", "size": "clamp(3rem, 7vw, 4rem)" },
+        { "slug": "9", "size": "clamp(4rem, 10vw, 6rem)" },
+        { "slug": "10", "size": "clamp(6rem, 15vw, 10rem)" }
+      ]
+    },
+    "border_radius": {
+      "small": "4px",
+      "medium": "10px",
+      "large": "20px",
+      "pill": "999px"
+    },
+    "custom_radius_css": {
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px"
+    },
+    "shadows": {
+      "soft": "0 4px 16px rgba(0, 0, 0, 0.04)",
+      "lifted": "0 20px 48px -8px rgba(0, 0, 0, 0.12)",
+      "deep_luxury": "0 32px 64px -12px rgba(0, 0, 0, 0.18)"
+    },
+    "css_shadows": {
+      "soft": "0 4px 24px color-mix(in oklch, var(--ig-ink) 8%, transparent)",
+      "lift": "0 24px 56px -12px color-mix(in oklch, var(--ig-ink) 14%, transparent)",
+      "inner": "inset 0 1px 0 color-mix(in oklch, var(--ig-surface) 75%, var(--ig-primary) 25%)"
+    },
+    "effects": {
+      "glassmorphism": {
+        "blur": "12px",
+        "bg": "oklch(0.985 0.005 85 / 0.7)",
+        "border": "1px solid oklch(0.65 0.12 75 / 0.1)"
+      },
+      "double_bezel": {
+        "description": "Nested subtle borders for depth — outer padding 1px with gold tint, inner surface with blur"
+      }
+    },
+    "easing": {
+      "out_quart": "cubic-bezier(0.23, 1, 0.32, 1)",
+      "productive": "cubic-bezier(0.32, 0.72, 0, 1)",
+      "emphasis": "cubic-bezier(0.77, 0, 0.175, 1)"
+    },
+    "layout": {
+      "content_width": "72rem",
+      "wide_width": "88rem",
+      "breakpoints": [375, 768, 1024, 1440, 1920]
+    }
+  },
+  "assets": {
+    "images": [
+      "hero-primary.png / .webp",
+      "izabela-portrait.png / .webp",
+      "service-germany.png / .webp",
+      "service-holland.png / .webp",
+      "og-image.png / .webp",
+      "favicon.png / .webp"
+    ],
+    "fonts": [
+      "Geist-Regular.woff2",
+      "Geist-SemiBold.woff2",
+      "Geist-Bold.woff2",
+      "PlayfairDisplay-Regular.woff2",
+      "PlayfairDisplay-Variable.woff2"
+    ],
+    "scripts": [
+      "nav.js (mobile nav, IntersectionObserver sticky header)",
+      "animations.js (reveal animations, counters, reduced-motion support)"
+    ]
+  },
+  "brand_voice": {
+    "language": "Polish",
+    "tone": "Pewna, ciepła, fachowa — confident, warm, professional",
+    "style": "Empatyczna, jasna, bez żargonu. Codzienne metafory dla skomplikowanych konceptów podatkowych.",
+    "target_audience": "Polscy pracownicy 25-55 lat pracujący/pracowali w Niemczech/Holandii",
+    "device_context": "Mobile-first — przeglądanie w przerwach pracy, wieczorami"
+  }
+}

@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+import ScrollReveal from '../animations/ScrollReveal';
+import StaggerReveal from '../animations/StaggerReveal';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang as 'pl' | 'en' | 'de');
+
+const allDownloads = await getCollection('downloads');
+const downloads = allDownloads
+  .filter((d) => d.data.lang === lang);
+---
+
+<section class="py-32 md:py-48 section-padding bg-stone-50" aria-labelledby="downloads-heading">
+  <div class="container-wide">
+    <ScrollReveal client:visible>
+      <div class="max-w-3xl mb-20">
+        <h2 id="downloads-heading" class="text-4xl md:text-5xl font-bold tracking-tighter text-stone-950 leading-none">
+          {t('downloads.title')} <span class="text-gradient">{t('downloads.titleHighlight')}</span>
+        </h2>
+        <p class="mt-6 text-lg text-stone-500 leading-relaxed max-w-[65ch]">
+          {t('downloads.subtitle')}
+        </p>
+      </div>
+    </ScrollReveal>
+
+    <StaggerReveal client:visible className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {downloads.map((file) => (
+        <div class="group relative glass-panel rounded-[2rem] p-8 transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] hover:border-stone-300/60">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-12 h-12 rounded-xl bg-stone-100 flex items-center justify-center text-stone-600 group-hover:bg-brand-50 group-hover:text-brand-700 transition-colors duration-300">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="18" x2="12" y2="12"/>
+                <polyline points="9 15 12 18 15 15"/>
+              </svg>
+            </div>
+            <span class="text-xs font-semibold text-stone-400 bg-stone-100 px-2.5 py-1 rounded-full uppercase">{file.data.fileType}</span>
+          </div>
+          <h3 class="text-lg font-semibold text-stone-900 group-hover:text-brand-800 transition-colors duration-300">
+            {file.data.title.name}
+          </h3>
+          <p class="mt-2 text-sm text-stone-500 line-clamp-3">
+            {file.body?.slice(0, 120)}{file.body && file.body.length > 120 ? '...' : ''}
+          </p>
+          <a
+            href={file.data.fileUrl}
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-stone-700 hover:text-brand-700 transition-colors group/link"
+            data-track="file_download"
+            data-track-label={file.data.title.name}
+          >
+            {t('downloads.cta')}
+            <svg class="w-4 h-4 transition-transform group-hover/link:translate-y-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      ))}
+    </StaggerReveal>
+  </div>
+</section>

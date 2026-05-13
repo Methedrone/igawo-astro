@@ -1,0 +1,243 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { useTranslations, getLangFromUrl, getLocalizedPath } from '../i18n/utils';
+import { getCollection } from 'astro:content';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const allServices = await getCollection('services');
+const services = allServices.filter((s) => s.data.lang === lang);
+
+const allFaq = await getCollection('faq');
+const faq = allFaq
+  .filter((item) => item.data.lang === lang)
+  .slice(0, 6);
+
+const searchLabels = {
+  page: t('search.page'),
+  service: t('search.service'),
+  faq: t('search.faq'),
+};
+
+const searchIndex = [
+  { title: t('nav.home'), url: getLocalizedPath('/', lang), description: t('meta.home.description'), category: 'page' },
+  { title: t('nav.about'), url: getLocalizedPath('/o-nas', lang), description: t('meta.about.description'), category: 'page' },
+  { title: t('nav.services'), url: getLocalizedPath('/oferta', lang), description: t('meta.services.description'), category: 'page' },
+  { title: t('nav.pricing'), url: getLocalizedPath('/cennik', lang), description: t('meta.pricing.description'), category: 'page' },
+  { title: t('nav.downloads'), url: getLocalizedPath('/pliki', lang), description: t('meta.downloads.description'), category: 'page' },
+  { title: t('nav.forms'), url: getLocalizedPath('/kwestionariusze', lang), description: t('meta.forms.description'), category: 'page' },
+  { title: t('nav.faq'), url: getLocalizedPath('/faq', lang), description: t('meta.faq.description'), category: 'page' },
+  { title: t('nav.contact'), url: getLocalizedPath('/kontakt', lang), description: t('meta.contact.description'), category: 'page' },
+  ...services.map((s) => ({
+    title: s.data.title.name,
+    url: getLocalizedPath('/oferta', lang),
+    description: s.data.description || '',
+    category: 'service',
+  })),
+  ...faq.map((f) => ({
+    title: f.data.question,
+    url: getLocalizedPath('/faq', lang),
+    description: f.body?.trim().slice(0, 100).replace(/\n/g, ' ') + '...' || '',
+    category: 'faq',
+  })),
+];
+
+const popularPages = [
+  {
+    title: t('nav.home'),
+    url: getLocalizedPath('/', lang),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  },
+  {
+    title: t('nav.services'),
+    url: getLocalizedPath('/oferta', lang),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  },
+  {
+    title: t('nav.pricing'),
+    url: getLocalizedPath('/cennik', lang),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+  },
+  {
+    title: t('nav.faq'),
+    url: getLocalizedPath('/faq', lang),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  },
+  {
+    title: t('nav.contact'),
+    url: getLocalizedPath('/kontakt', lang),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  },
+  {
+    title: t('nav.downloads'),
+    url: getLocalizedPath('/pliki', lang),
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  },
+];
+---
+
+<Layout title={t('404.title')} description={t('404.text')} noindex={true}>
+  <div class="min-h-[100dvh] flex flex-col px-6 pt-32 pb-20">
+    <div class="max-w-3xl mx-auto w-full text-center">
+      <!-- 404 Header -->
+      <div class="mb-10">
+        <h1 class="text-[7rem] md:text-[10rem] font-bold tracking-tighter text-gradient leading-none select-none" aria-hidden="true">404</h1>
+        <p class="sr-only">{t('404.title')}</p>
+        <p class="mt-4 text-xl md:text-2xl font-semibold text-stone-900">{t('404.title')}</p>
+        <p class="mt-3 text-base md:text-lg text-stone-500 max-w-md mx-auto leading-relaxed">{t('404.text')}</p>
+      </div>
+
+      <!-- Search -->
+      <div class="relative max-w-xl mx-auto mb-3">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <svg class="w-5 h-5 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <input
+          type="text"
+          id="search-input"
+          class="w-full pl-12 pr-4 py-3.5 bg-white border border-stone-200/60 rounded-2xl text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500/40 transition-all shadow-sm"
+          placeholder={t('404.searchPlaceholder')}
+          autocomplete="off"
+          aria-label={t('404.searchPlaceholder')}
+        />
+      </div>
+      <p class="text-sm text-stone-400 mb-10">{t('404.searchHint')}</p>
+
+      <!-- Search Results -->
+      <div id="search-results" class="hidden text-left mb-12">
+        <div class="space-y-2" id="results-list"></div>
+        <p id="no-results" class="hidden mt-6 text-stone-500 text-center">{t('404.noResults')}</p>
+      </div>
+
+      <!-- Popular Pages -->
+      <div id="popular-pages">
+        <h2 class="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-5">{t('404.popularPages')}</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {popularPages.map((page) => (
+            <a
+              href={page.url}
+              class="group flex flex-col items-center gap-3 p-5 rounded-2xl bg-stone-50 border border-stone-200/40 hover:bg-white hover:border-stone-300/60 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] transition-all duration-300"
+            >
+              <div class="w-12 h-12 rounded-xl bg-white border border-stone-200/50 flex items-center justify-center text-stone-600 group-hover:text-brand-700 group-hover:scale-105 transition-all duration-300 shadow-sm">
+                <Fragment set:html={page.icon} />
+              </div>
+              <span class="text-sm font-medium text-stone-700 group-hover:text-stone-900 transition-colors">{page.title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Back Home -->
+      <a
+        href={getLocalizedPath('/', lang)}
+        class="mt-12 inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold text-white bg-stone-900 rounded-full hover:bg-stone-800 transition-colors active:scale-[0.98] shadow-sm"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        {t('404.home')}
+      </a>
+    </div>
+  </div>
+
+  <script type="application/json" id="search-index" set:html={JSON.stringify(searchIndex)} />
+  <script type="application/json" id="search-labels" set:html={JSON.stringify(searchLabels)} />
+
+  <script>
+    (function () {
+      const input = document.getElementById('search-input');
+      const resultsContainer = document.getElementById('search-results');
+      const resultsList = document.getElementById('results-list');
+      const noResults = document.getElementById('no-results');
+      const popularPages = document.getElementById('popular-pages');
+      const indexEl = document.getElementById('search-index');
+      const labelsEl = document.getElementById('search-labels');
+      const index = JSON.parse(indexEl?.textContent || '[]');
+      const labels = JSON.parse(labelsEl?.textContent || '{}');
+
+      const categoryColors: Record<string, string> = {
+        page: 'bg-stone-100 text-stone-600',
+        service: 'bg-brand-50 text-brand-700',
+        faq: 'bg-sky-50 text-sky-700',
+      };
+
+      function escapeHtml(str: string) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function highlight(text: string, query: string) {
+        if (!query) return escapeHtml(text);
+        const regex = new RegExp('(' + escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        return escapeHtml(text).replace(regex, '<mark class="bg-brand-100 text-brand-900 rounded px-0.5">$1</mark>');
+      }
+
+      function renderResults(query: string) {
+        const q = query.trim().toLowerCase();
+        if (!q) {
+          resultsContainer.classList.add('hidden');
+          popularPages.classList.remove('hidden');
+          return;
+        }
+
+        const filtered = index.filter((item: any) => {
+          const haystack = (item.title + ' ' + item.description + ' ' + item.category).toLowerCase();
+          return haystack.includes(q);
+        });
+
+        resultsContainer.classList.remove('hidden');
+        popularPages.classList.add('hidden');
+
+        if (filtered.length === 0) {
+          resultsList.innerHTML = '';
+          noResults.classList.remove('hidden');
+          return;
+        }
+
+        noResults.classList.add('hidden');
+        resultsList.innerHTML = filtered
+          .map((item: any) => {
+            const catLabel = labels[item.category] || item.category;
+            const catColor = categoryColors[item.category] || 'bg-stone-100 text-stone-600';
+            return `
+              <a href="${item.url}" class="group flex items-start gap-4 p-4 rounded-2xl bg-stone-50 border border-stone-200/40 hover:bg-white hover:border-stone-300/60 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)] transition-all duration-300">
+                <div class="flex-1 min-w-0 text-left">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-base font-semibold text-stone-900 group-hover:text-brand-800 transition-colors">${highlight(item.title, q)}</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${catColor}">${catLabel}</span>
+                  </div>
+                  <p class="text-sm text-stone-500 leading-relaxed line-clamp-2">${highlight(item.description, q)}</p>
+                </div>
+                <svg class="w-5 h-5 text-stone-300 group-hover:text-stone-500 group-hover:translate-x-0.5 transition-all duration-300 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </a>
+            `;
+          })
+          .join('');
+      }
+
+      let debounce: number;
+      input?.addEventListener('input', (e) => {
+        clearTimeout(debounce);
+        const value = (e.target as HTMLInputElement).value;
+        debounce = window.setTimeout(() => renderResults(value), 150);
+      });
+
+      input?.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          (e.target as HTMLInputElement).value = '';
+          renderResults('');
+        }
+      });
+    })();
+  </script>
+</Layout>

@@ -1,0 +1,206 @@
+---
+export const prerender = true;
+import { getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { languages, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { breadcrumbSchema, pricingPageSchema } from '../../lib/schema';
+import ScrollReveal from '../../components/animations/ScrollReveal';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const pageIdMap: Record<string, string> = {
+  pl: 'cennik',
+  en: 'pricing',
+  de: 'preise',
+};
+const pageEntry = await getEntry('pages', pageIdMap[lang] ?? 'cennik');
+const pageDesc = pageEntry?.data.description ?? t('meta.pricing.description');
+
+const packages = [
+  {
+    name: lang === 'pl' ? 'Start' : lang === 'en' ? 'Start' : 'Start',
+    price: '150 EUR',
+    description: lang === 'pl' ? 'Podstawowe rozliczenie z jednego kraju' : lang === 'en' ? 'Basic tax return from one country' : 'Grundlegende Steuererklärung aus einem Land',
+    features: lang === 'pl' ? [
+      'Rozliczenie z Niemiec lub Holandii',
+      'Sprawdzenie wszystkich ulg i zwrotów',
+      'Kontakt z urzędem skarbowym',
+      'Wynik w ciągu 2 tygodni',
+    ] : lang === 'en' ? [
+      'Tax return from Germany or the Netherlands',
+      'Checking all allowances and refunds',
+      'Contact with the tax office',
+      'Results within 2 weeks',
+    ] : [
+      'Steuererklärung aus Deutschland oder den Niederlanden',
+      'Prüfung aller Abzüge und Erstattungen',
+      'Kontakt mit dem Finanzamt',
+      'Ergebnis innerhalb von 2 Wochen',
+    ],
+    gradient: 'from-stone-50 to-stone-100/50',
+    border: 'border-stone-200/40',
+    cta: lang === 'pl' ? 'Wybierz Start' : lang === 'en' ? 'Choose Start' : 'Start wählen',
+  },
+  {
+    name: lang === 'pl' ? 'Rozwój' : lang === 'en' ? 'Growth' : 'Wachstum',
+    price: '280 EUR',
+    description: lang === 'pl' ? 'Więcej zwrotów, priorytetowa obsługa' : lang === 'en' ? 'More refunds, priority handling' : 'Mehr Erstattungen, bevorzugte Bearbeitung',
+    features: lang === 'pl' ? [
+      'Wszystko z pakietu Start',
+      'Kindergeld lub zwrot SOKA-BAU',
+      'Konsultacja telefoniczna 30 min',
+      'Priorytetowa obsługa — 7 dni',
+    ] : lang === 'en' ? [
+      'Everything from Start package',
+      'Kindergeld or SOKA-BAU refund',
+      '30-minute phone consultation',
+      'Priority handling — 7 days',
+    ] : [
+      'Alles aus dem Start-Paket',
+      'Kindergeld oder SOKA-BAU-Erstattung',
+      '30-minütige Telefonberatung',
+      'Bevorzugte Bearbeitung — 7 Tage',
+    ],
+    gradient: 'from-brand-50 to-brand-100/30',
+    border: 'border-brand-200/40',
+    cta: lang === 'pl' ? 'Wybierz Rozwój' : lang === 'en' ? 'Choose Growth' : 'Wachstum wählen',
+    popular: true,
+  },
+  {
+    name: lang === 'pl' ? 'Premium' : lang === 'en' ? 'Premium' : 'Premium',
+    price: '450 EUR',
+    description: lang === 'pl' ? 'Kompleksowa obsługa bez limitu' : lang === 'en' ? 'Full service with no limits' : 'Kompletter Service ohne Limit',
+    features: lang === 'pl' ? [
+      'Wszystko z pakietu Rozwój',
+      'Rozliczenie z wielu krajów',
+      'Pełna reprezentacja przed urzędem',
+      'Bez limitu konsultacji przez rok',
+    ] : lang === 'en' ? [
+      'Everything from Growth package',
+      'Tax returns from multiple countries',
+      'Full representation with tax office',
+      'Unlimited consultations for a year',
+    ] : [
+      'Alles aus dem Wachstum-Paket',
+      'Steuererklärungen aus mehreren Ländern',
+      'Vollständige Vertretung gegenüber dem Finanzamt',
+      'Unbegrenzte Beratung für ein Jahr',
+    ],
+    gradient: 'from-stone-100 to-stone-200/30',
+    border: 'border-stone-300/40',
+    cta: lang === 'pl' ? 'Wybierz Premium' : lang === 'en' ? 'Choose Premium' : 'Premium wählen',
+  },
+];
+
+const pageTitle = lang === 'pl' ? 'Cennik' : lang === 'en' ? 'Pricing' : 'Preise';
+
+const homePath = getLocalizedPath('/', lang);
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: t('nav.pricing') },
+  ], lang),
+  pricingPageSchema(lang),
+];
+---
+
+<Layout title={pageTitle} description={pageDesc} schemas={schemas}>
+  <div class="min-h-[100dvh] px-6 py-32 max-w-6xl mx-auto">
+    <ScrollReveal client:load>
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tighter text-stone-950">{pageTitle}</h1>
+        <p class="mt-6 text-lg text-stone-500 leading-relaxed">{pageDesc}</p>
+      </div>
+    </ScrollReveal>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {packages.map((pkg) => (
+        <div class={`relative rounded-[2rem] bg-linear-to-br ${pkg.gradient} border ${pkg.border} p-8 md:p-10 transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] hover:border-stone-300/60 flex flex-col`}>
+          {pkg.popular && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-600 text-white shadow-sm">
+                {lang === 'pl' ? 'Najpopularniejszy' : lang === 'en' ? 'Most Popular' : 'Beliebteste'}
+              </span>
+            </div>
+          )}
+
+          <div class="flex-1">
+            <h2 class="text-2xl font-bold tracking-tight text-stone-900">{pkg.name}</h2>
+            <p class="mt-2 text-stone-500 text-sm">{pkg.description}</p>
+
+            <div class="mt-6">
+              <span class="text-4xl font-bold tracking-tighter text-stone-900">{pkg.price}</span>
+            </div>
+
+            <ul class="mt-8 space-y-4">
+              {pkg.features.map((feature) => (
+                <li class="flex items-start gap-3 text-stone-600">
+                  <svg class="w-5 h-5 text-brand-600 mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="text-sm leading-relaxed">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="mt-10">
+            <a
+              href={getLocalizedPath('/kontakt', lang)}
+              class={`inline-flex w-full items-center justify-center px-6 py-3.5 text-sm font-semibold rounded-full transition-colors ${
+                pkg.popular
+                  ? 'bg-stone-900 text-white hover:bg-stone-800'
+                  : 'bg-white text-stone-900 border border-stone-200 hover:bg-stone-50'
+              }`}
+              data-track="cta_click"
+              data-track-label={`pricing_${pkg.name.toLowerCase()}`}
+            >
+              {pkg.cta}
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <ScrollReveal client:visible delay={0.2}>
+      <div class="mt-20 rounded-[2rem] bg-stone-50 border border-stone-200/40 p-8 md:p-12 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-stone-900">
+          {lang === 'pl' ? 'Nie wiesz, który pakiet wybrać?' : lang === 'en' ? 'Not sure which package to choose?' : 'Nicht sicher, welches Paket das Richtige ist?'}
+        </h2>
+        <p class="mt-4 text-stone-500 max-w-xl mx-auto">
+          {lang === 'pl'
+            ? 'Zadzwoń lub napisz. W ciągu 15 minut powiem Ci, co będzie dla Ciebie najlepsze — bez żadnych zobowiązań.'
+            : lang === 'en'
+            ? 'Call or write. Within 15 minutes I will tell you what is best for you — with no obligation.'
+            : 'Rufen Sie an oder schreiben Sie mir. Innerhalb von 15 Minuten sage ich Ihnen, was für Sie am besten ist — ohne jegliche Verpflichtung.'}
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="tel:+48570016826"
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-stone-900 bg-white border border-stone-200 rounded-full hover:bg-stone-50 transition-colors"
+          >
+            <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            +48 570 016 826
+          </a>
+          <a
+            href="mailto:igawo14@gmail.com"
+            class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-stone-900 rounded-full hover:bg-stone-800 transition-colors"
+          >
+            <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            {lang === 'pl' ? 'Napisz wiadomość' : lang === 'en' ? 'Send a message' : 'Nachricht senden'}
+          </a>
+        </div>
+      </div>
+    </ScrollReveal>
+  </div>
+</Layout>

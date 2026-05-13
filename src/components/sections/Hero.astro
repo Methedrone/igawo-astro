@@ -1,0 +1,86 @@
+---
+import { getLocalizedPath, useTranslations } from '../../i18n/utils';
+import ScrollReveal from '../animations/ScrollReveal';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang as 'pl' | 'en' | 'de');
+---
+
+<section class="relative min-h-[100dvh] flex items-center justify-center overflow-hidden gradient-radial">
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-[url('/images/hero-1.avif')] bg-cover bg-center opacity-[0.08] grayscale" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-stone-25/0 via-stone-25/60 to-stone-25" aria-hidden="true"></div>
+  </div>
+
+  <div class="container-wide section-padding pt-32 pb-20 md:pt-40 md:pb-32">
+    <div class="max-w-5xl mx-auto text-center">
+      <ScrollReveal client:load delay={0.1}>
+        <h1 class="text-[clamp(2.5rem,6vw,5rem)] font-bold tracking-tighter leading-[1.05] text-balance text-stone-950">
+          {t('hero.title')}
+          <span class="text-gradient">{t('hero.titleHighlight')}</span>
+        </h1>
+      </ScrollReveal>
+
+      <ScrollReveal client:load delay={0.25} y={20}>
+        <p class="mt-8 text-lg md:text-xl text-stone-500 max-w-2xl mx-auto leading-relaxed text-balance">
+          {t('hero.subtitle')}
+        </p>
+      </ScrollReveal>
+
+      <ScrollReveal client:load delay={0.4} y={20}>
+        <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href={getLocalizedPath('/oferta', lang)}
+            class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-stone-900 rounded-full hover:bg-stone-800 transition-all active:scale-[0.98] shadow-[0_8px_24px_-6px_rgba(0,0,0,0.25)]"
+            data-track="cta_click"
+            data-track-label="hero_primary_offer"
+          >
+            {t('hero.ctaPrimary')}
+            <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a
+            href={getLocalizedPath('/o-nas', lang)}
+            class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-stone-700 bg-white/80 backdrop-blur-sm border border-stone-200/60 rounded-full hover:bg-white hover:border-stone-300 transition-all active:scale-[0.98]"
+            data-track="cta_click"
+            data-track-label="hero_secondary_about"
+          >
+            {t('hero.ctaSecondary')}
+          </a>
+        </div>
+      </ScrollReveal>
+
+      <ScrollReveal client:load delay={0.55} y={10}>
+        <div class="mt-20 flex items-center justify-center gap-8 text-stone-400">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span class="text-sm font-medium">{t('hero.badge1')}</span>
+          </div>
+          <div class="hidden sm:block w-px h-4 bg-stone-300"></div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span class="text-sm font-medium">{t('hero.badge2')}</span>
+          </div>
+          <div class="hidden sm:block w-px h-4 bg-stone-300"></div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-sm font-medium">{t('hero.badge3')}</span>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </div>
+</section>

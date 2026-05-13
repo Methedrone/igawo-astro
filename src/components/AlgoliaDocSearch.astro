@@ -1,0 +1,35 @@
+---
+import { algoliaConfig } from '../config/algolia';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+{algoliaConfig.enabled && (
+  <>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+    <div id="docsearch" class="hidden" />
+    <script is:inline define:vars={{ config: algoliaConfig, lang }}>
+      window.docsearchConfig = {
+        appId: config.appId,
+        apiKey: config.apiKey,
+        indexName: config.indexName,
+        container: '#docsearch',
+        placeholder: config.placeholder[lang] || config.placeholder.en,
+        translations: {
+          button: {
+            buttonText: 'Search',
+            buttonAriaLabel: 'Search',
+          },
+        },
+      };
+    </script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script is:inline>
+      if (window.docsearchConfig && window.docsearchConfig.appId) {
+        window.docsearch(window.docsearchConfig);
+      }
+    </script>
+  </>
+)}

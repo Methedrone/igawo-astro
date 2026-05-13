@@ -1,0 +1,152 @@
+---
+import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/utils';
+import ScrollReveal from '../animations/ScrollReveal';
+import StaggerReveal from '../animations/StaggerReveal';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang as 'pl' | 'en' | 'de');
+
+const allForms = await getCollection('forms');
+const forms = allForms
+  .filter((f) => f.data.lang === lang);
+
+const iconMap: Record<string, string> = {
+  'formularz-kontaktowy': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  'kontaktformular': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  'contact-form': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  'zapytanie-ofertowe': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  'service-inquiry': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  'dienstanfrage': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  'konsultacja-podatkowa': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  'tax-consultation': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  'steuerberatung': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  'kwestionariusz-rozliczeniowy': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M9 14l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>`,
+  'tax-questionnaire': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M9 14l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>`,
+  'steuerfragebogen': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M9 14l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>`,
+  'kindergeld': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M12 2a3 3 0 0 0-3 3v1H6a2 2 0 0 0-2 2v3.5a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5V8a2 2 0 0 0-2-2h-3V5a3 3 0 0 0-3-3z"/><path d="M4 12v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/><path d="M12 14v4"/></svg>`,
+  'soka-bau': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M2 20h20"/><path d="M5 20v-8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>`,
+};
+
+const colorMap: Record<string, string> = {
+  'formularz-kontaktowy': 'bg-brand-50 text-brand-700',
+  'kontaktformular': 'bg-brand-50 text-brand-700',
+  'contact-form': 'bg-brand-50 text-brand-700',
+  'zapytanie-ofertowe': 'bg-blue-50 text-blue-700',
+  'service-inquiry': 'bg-blue-50 text-blue-700',
+  'dienstanfrage': 'bg-blue-50 text-blue-700',
+  'konsultacja-podatkowa': 'bg-amber-50 text-amber-700',
+  'tax-consultation': 'bg-amber-50 text-amber-700',
+  'steuerberatung': 'bg-amber-50 text-amber-700',
+  'kwestionariusz-rozliczeniowy': 'bg-emerald-50 text-emerald-700',
+  'tax-questionnaire': 'bg-emerald-50 text-emerald-700',
+  'steuerfragebogen': 'bg-emerald-50 text-emerald-700',
+  'kindergeld': 'bg-rose-50 text-rose-700',
+  'soka-bau': 'bg-indigo-50 text-indigo-700',
+};
+
+const defaultIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
+const defaultColor = 'bg-stone-100 text-stone-700';
+
+const urlMap: Record<string, Record<string, string>> = {
+  pl: {
+    'kwestionariusz-rozliczeniowy': '/kwestionariusz/rozliczeniowy',
+    'kindergeld': '/kwestionariusz/kindergeld',
+    'soka-bau': '/kwestionariusz/soka-bau',
+    'formularz-kontaktowy': '/kontakt',
+    'zapytanie-ofertowe': '/kontakt',
+    'konsultacja-podatkowa': '/kontakt',
+  },
+  en: {
+    'tax-questionnaire': '/en/kwestionariusz/tax-questionnaire',
+    'kindergeld': '/en/kwestionariusz/kindergeld',
+    'soka-bau': '/en/kwestionariusz/soka-bau',
+    'contact-form': '/en/contact',
+    'service-inquiry': '/en/contact',
+    'tax-consultation': '/en/contact',
+  },
+  de: {
+    'steuerfragebogen': '/de/kwestionariusz/steuerfragebogen',
+    'kindergeld': '/de/kwestionariusz/kindergeld',
+    'soka-bau': '/de/kwestionariusz/soka-bau',
+    'kontaktformular': '/de/kontakt',
+    'dienstanfrage': '/de/kontakt',
+    'steuerberatung': '/de/kontakt',
+  },
+};
+
+const slugMap: Record<string, string> = {
+  'kwestionariusz-rozliczeniowy': 'rozliczeniowy',
+  'tax-questionnaire': 'tax-questionnaire',
+  'steuerfragebogen': 'steuerfragebogen',
+  'kindergeld': 'kindergeld',
+  'soka-bau': 'soka-bau',
+  'formularz-kontaktowy': 'kontakt',
+  'contact-form': 'contact',
+  'kontaktformular': 'kontakt',
+  'zapytanie-ofertowe': 'kontakt',
+  'service-inquiry': 'contact',
+  'dienstanfrage': 'kontakt',
+  'konsultacja-podatkowa': 'kontakt',
+  'tax-consultation': 'contact',
+  'steuerberatung': 'kontakt',
+};
+
+function getFormUrl(formId: string, formLang: string): string {
+  const base = urlMap[formLang]?.[formId] ?? '#';
+  return base;
+}
+---
+
+<section class="py-32 md:py-48 section-padding" aria-labelledby="forms-heading">
+  <div class="container-wide">
+    <ScrollReveal client:visible>
+      <div class="max-w-3xl mb-20">
+        <h2 id="forms-heading" class="text-4xl md:text-5xl font-bold tracking-tighter text-stone-950 leading-none">
+          {t('forms.title')} <span class="text-gradient">{t('forms.titleHighlight')}</span>
+        </h2>
+        <p class="mt-6 text-lg text-stone-500 leading-relaxed max-w-[65ch]">
+          {t('forms.subtitle')}
+        </p>
+      </div>
+    </ScrollReveal>
+
+    <StaggerReveal client:visible className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {forms.map((form) => {
+        const id = form.id.replace(/-en$|-de$/, '');
+        const icon = iconMap[form.id] ?? iconMap[id] ?? defaultIcon;
+        const color = colorMap[form.id] ?? colorMap[id] ?? defaultColor;
+        return (
+          <div class="group relative glass-panel rounded-[2.5rem] p-8 md:p-10 transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] hover:border-stone-300/60">
+            <div class="flex items-start gap-5">
+              <div class={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${color} transition-transform duration-500 group-hover:scale-105`}>
+                <Fragment set:html={icon} />
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-stone-900 group-hover:text-brand-800 transition-colors duration-300">
+                  {form.data.title.name}
+                </h3>
+                <p class="mt-2 text-stone-500 leading-relaxed">
+                  {form.body?.slice(0, 140)}{form.body && form.body.length > 140 ? '...' : ''}
+                </p>
+                <a
+                  href={getFormUrl(form.data.title.slug, form.data.lang)}
+                  class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-stone-700 hover:text-brand-700 transition-colors group/link"
+                >
+                  {t('forms.cta')}
+                  <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-0.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </StaggerReveal>
+  </div>
+</section>

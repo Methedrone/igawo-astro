@@ -1,0 +1,42 @@
+---
+export const prerender = true;
+import { getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { languages, useTranslations, getLocalizedPath } from '../../i18n/utils';
+import { breadcrumbSchema } from '../../lib/schema';
+import FormsSection from '../../components/sections/FormsSection.astro';
+import CtaSection from '../../components/sections/CtaSection.astro';
+
+export function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const pageIdMap: Record<string, string> = {
+  pl: 'kwestionariusze',
+  en: 'forms',
+  de: 'frageboegen',
+};
+const pageEntry = await getEntry('pages', pageIdMap[lang] ?? 'kwestionariusze');
+const pageDesc = pageEntry?.data.description ?? t('meta.forms.description');
+
+const homePath = getLocalizedPath('/', lang);
+const schemas = [
+  breadcrumbSchema([
+    { name: t('nav.home'), item: homePath },
+    { name: t('nav.forms') },
+  ], lang),
+];
+---
+
+<Layout title={t('nav.forms')} description={pageDesc} schemas={schemas}>
+  <div class="pt-32 md:pt-40 pb-16 section-padding">
+    <div class="container-wide">
+      <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-stone-950 leading-none">{t('nav.forms')}</h1>
+    </div>
+  </div>
+  <FormsSection lang={lang} />
+  <CtaSection lang={lang} />
+</Layout>

@@ -1,0 +1,18 @@
+---
+// Root redirect: / → /pl (Astro auto-generates this with prefixDefaultLocale: true,
+// but we keep an explicit redirect page to ensure no duplicate PL content at root)
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0;url=/pl" />
+    <link rel="canonical" href="https://igawo.pl/pl" />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <p>Przekierowanie na <a href="/pl">igawo.pl/pl</a>...</p>
+  </body>
+</html>

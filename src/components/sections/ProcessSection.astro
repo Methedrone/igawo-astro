@@ -1,0 +1,81 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import StackingCards from '../animations/StackingCards';
+import ScrollReveal from '../animations/ScrollReveal';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang as 'pl' | 'en' | 'de');
+
+const steps = [
+  {
+    label: t('process.step1.label'),
+    title: t('process.step1.title'),
+    desc: t('process.step1.desc'),
+    img: '/images/hero-1.jpg',
+    alt: t('process.step1.title'),
+  },
+  {
+    label: t('process.step2.label'),
+    title: t('process.step2.title'),
+    desc: t('process.step2.desc'),
+    img: '/images/hero-2.jpg',
+    alt: t('process.step2.title'),
+  },
+  {
+    label: t('process.step3.label'),
+    title: t('process.step3.title'),
+    desc: t('process.step3.desc'),
+    img: '/images/hero-3.jpg',
+    alt: t('process.step3.title'),
+  },
+  {
+    label: t('process.step4.label'),
+    title: t('process.step4.title'),
+    desc: t('process.step4.desc'),
+    img: '/images/about-office.jpg',
+    alt: t('process.step4.title'),
+  },
+];
+---
+
+<section class="py-32 md:py-48 section-padding" aria-labelledby="process-heading">
+  <div class="container-wide">
+    <ScrollReveal client:visible>
+      <div class="max-w-3xl mb-20">
+        <h2 id="process-heading" class="text-4xl md:text-5xl font-bold tracking-tighter text-stone-950 leading-none">
+          {t('process.title')} <span class="text-gradient">{t('process.titleHighlight')}</span>
+        </h2>
+        <p class="mt-6 text-lg text-stone-500 leading-relaxed max-w-[65ch]">
+          {t('process.subtitle')}
+        </p>
+      </div>
+    </ScrollReveal>
+
+    <StackingCards client:visible className="relative">
+      {steps.map((step, i) => (
+        <div class={`stack-card relative glass-panel rounded-[2.5rem] p-8 md:p-16 ${i < steps.length - 1 ? 'mb-8' : ''} bg-white`}>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <div class="text-sm font-semibold text-brand-600 mb-3">{step.label}</div>
+              <h3 class="text-2xl md:text-3xl font-bold tracking-tight text-stone-900">{step.title}</h3>
+              <p class="mt-4 text-stone-500 leading-relaxed">
+                {step.desc}
+              </p>
+            </div>
+            <div class="aspect-[4/3] rounded-2xl bg-stone-100 overflow-hidden">
+              <picture>
+                <source srcset={step.img.replace(/\.(jpg|jpeg|png)$/, '.avif')} type="image/avif" />
+                <source srcset={step.img.replace(/\.(jpg|jpeg|png)$/, '.webp')} type="image/webp" />
+                <img src={step.img} alt={step.alt} class="w-full h-full object-cover" loading="lazy" decoding="async" />
+              </picture>
+            </div>
+          </div>
+        </div>
+      ))}
+    </StackingCards>
+  </div>
+</section>

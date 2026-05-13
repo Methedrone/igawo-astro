@@ -1,0 +1,42 @@
+---
+/**
+ * Facebook JavaScript SDK loader.
+ *
+ * Required for Facebook social plugins (Like, Share, Comments,
+ * Messenger Chat, etc.).
+ *
+ * Configure in src/config/analytics.ts:
+ *   facebookSdk: { enabled: true, appId: 'your_app_id' }
+ *
+ * The component only renders when enabled and appId is provided.
+ * The SDK is loaded asynchronously and initialized with the
+ * configured locale matching the current page language.
+ */
+import { ANALYTICS_CONFIG, FACEBOOK_LOCALES } from '../../config/analytics';
+
+interface Props {
+  /** Page language code — drives SDK locale */
+  lang?: string;
+}
+
+const { lang = 'pl' } = Astro.props;
+
+const { facebookSdk } = ANALYTICS_CONFIG;
+const sdkLocale = FACEBOOK_LOCALES[lang] ?? 'pl_PL';
+---
+
+{
+  facebookSdk.enabled && facebookSdk.appId && facebookSdk.appId !== 'xxx' && (
+    <>
+      <div id="fb-root"></div>
+      <script
+        is:inline
+        async
+        defer
+        crossorigin="anonymous"
+        src={`https://connect.facebook.net/${sdkLocale}/sdk.js#xfbml=1&version=v19.0&appId=${facebookSdk.appId}`}
+        nonce="igawo-sdk"
+      ></script>
+    </>
+  )
+}
