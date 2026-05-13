@@ -4,6 +4,7 @@ import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import keystatic from '@keystatic/astro';
 import react from '@astrojs/react';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
   trailingSlash: 'never',
   adapter: cloudflare(),
   vite: {
+    plugins: [tailwindcss()],
     build: {
       rollupOptions: {
         external: ['/pagefind/pagefind.js'],
@@ -43,7 +45,8 @@ export default defineConfig({
     defaultLocale: 'pl',
     locales: ['pl', 'en', 'de'],
     routing: {
-      prefixDefaultLocale: true,
+      prefixDefaultLocale: false,
+      redirectToDefaultLocale: false,
     },
   },
 });
