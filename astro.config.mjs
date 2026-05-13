@@ -10,7 +10,10 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://igawo.pl',
   output: 'server',
-  trailingSlash: 'never',
+  trailingSlash: 'always',
+  build: {
+    format: 'directory',
+  },
   adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()],

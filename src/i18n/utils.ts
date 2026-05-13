@@ -3,50 +3,51 @@ import { ui, defaultLang, languages } from './ui';
 export { languages, defaultLang };
 
 const normalizePath = (path: string) => {
-  if (!path) return '/';
+  if (!path || path === '/') return '/';
   const withLeading = path.startsWith('/') ? path : `/${path}`;
-  if (withLeading.length > 1 && withLeading.endsWith('/')) {
-    return withLeading.slice(0, -1);
+  // Always ensure trailing slash (except root)
+  if (withLeading.endsWith('/')) {
+    return withLeading;
   }
-  return withLeading;
+  return `${withLeading}/`;
 };
 
 export const slugTranslations = {
   pl: {
-    '/o-nas': '/about',
-    '/oferta': '/services',
-    '/pliki': '/downloads',
-    '/kwestionariusze': '/forms',
-    '/kontakt': '/contact',
-    '/cennik': '/pricing',
-    '/faq': '/faq',
-    '/polityka-prywatnosci': '/privacy-policy',
-    '/regulamin': '/terms',
-    '/szukaj': '/search',
+    '/o-nas/': '/about/',
+    '/oferta/': '/services/',
+    '/pliki/': '/downloads/',
+    '/kwestionariusze/': '/forms/',
+    '/kontakt/': '/contact/',
+    '/cennik/': '/pricing/',
+    '/faq/': '/faq/',
+    '/polityka-prywatnosci/': '/privacy-policy/',
+    '/regulamin/': '/terms/',
+    '/szukaj/': '/search/',
   },
   en: {
-    '/about': '/o-nas',
-    '/services': '/oferta',
-    '/downloads': '/pliki',
-    '/forms': '/kwestionariusze',
-    '/contact': '/kontakt',
-    '/pricing': '/cennik',
-    '/faq': '/faq',
-    '/privacy-policy': '/polityka-prywatnosci',
-    '/terms': '/regulamin',
-    '/search': '/szukaj',
+    '/about/': '/o-nas/',
+    '/services/': '/oferta/',
+    '/downloads/': '/pliki/',
+    '/forms/': '/kwestionariusze/',
+    '/contact/': '/kontakt/',
+    '/pricing/': '/cennik/',
+    '/faq/': '/faq/',
+    '/privacy-policy/': '/polityka-prywatnosci/',
+    '/terms/': '/regulamin/',
+    '/search/': '/szukaj/',
   },
   de: {
-    '/about': '/o-nas',
-    '/services': '/oferta',
-    '/downloads': '/pliki',
-    '/forms': '/kwestionariusze',
-    '/contact': '/kontakt',
-    '/preise': '/cennik',
-    '/faq': '/faq',
-    '/datenschutz': '/polityka-prywatnosci',
-    '/agb': '/regulamin',
-    '/search': '/szukaj',
+    '/about/': '/o-nas/',
+    '/services/': '/oferta/',
+    '/downloads/': '/pliki/',
+    '/forms/': '/kwestionariusze/',
+    '/contact/': '/kontakt/',
+    '/preise/': '/cennik/',
+    '/faq/': '/faq/',
+    '/datenschutz/': '/polityka-prywatnosci/',
+    '/agb/': '/regulamin/',
+    '/search/': '/szukaj/',
   },
 } as const;
 
@@ -60,10 +61,10 @@ export function getLocalizedPath(path: string, lang: keyof typeof ui): string {
   const normalizedPath = normalizePath(path);
 
   if (lang === defaultLang) {
-    return normalizedPath === '/' ? '/pl' : `/pl${normalizedPath}`;
+    return normalizedPath === '/' ? '/pl/' : `/pl${normalizedPath}`;
   }
 
-  return normalizedPath === '/' ? `/${lang}` : `/${lang}${normalizedPath}`;
+  return normalizedPath === '/' ? `/${lang}/` : `/${lang}${normalizedPath}`;
 }
 
 export function translatePath(

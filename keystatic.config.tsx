@@ -2,7 +2,8 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'github',
+    repo: 'Methedrone/igawo-astro',
   },
   ui: {
     brand: { name: 'igawo CMS' },

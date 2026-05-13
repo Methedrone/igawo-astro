@@ -1,7 +1,7 @@
 # igawo.pl — Agent Instructions
 
-> Last updated: 2026-05-13 after i18n + content collection integration.
-> Stack: Astro 5, React 19 islands, GSAP, Tailwind CSS v4, Keystatic CMS.
+> Last updated: 2026-05-13 after trailing-slash fix + Keystatic production disable.
+> Stack: Astro 5.18, React 18 islands, GSAP, Tailwind CSS v4, Keystatic CMS (local-only).
 
 ---
 
@@ -9,20 +9,21 @@
 
 | Layer | Technology |
 |---|---|
-| Framework | Astro 5 (SSG + Cloudflare adapter) |
-| Components | Astro (.astro) + React 19 islands (.tsx) |
+| Framework | Astro 5 (SSR + Cloudflare adapter) |
+| Components | Astro (.astro) + React 18 islands (.tsx) |
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite` |
 | Animations | GSAP 3 + ScrollTrigger (React islands only) |
-| CMS | Keystatic (Git-based, local storage) |
+| CMS | Keystatic (Git-based, **local dev only**) |
 | i18n | Custom (dictionary + middleware) — PL / EN / DE |
 | Icons | Inline SVG (Phosphor-style strokes) |
 | Fonts | Geist + Satoshi via CDN (WOFF2 variable) |
 
 **Key config files:**
-- `astro.config.mjs` — site URL, i18n routing (`prefixDefaultLocale: true`), sitemap, Cloudflare adapter
+- `astro.config.mjs` — site URL, i18n routing (`prefixDefaultLocale: true`, `trailingSlash: 'always'`), sitemap, Cloudflare adapter
 - `src/styles/global.css` — Tailwind theme, font-face, utilities, reduced-motion
-- `src/middleware.ts` — redirects `/` → `/pl` (default locale)
-- `keystatic.config.tsx` — CMS collections, fields, local storage mode
+- `src/middleware.ts` — **pass-through** (no redirects; root `/` is a real page)
+- `keystatic.config.tsx` — CMS collections, fields, `storage: { kind: 'github', repo: 'Methedrone/igawo-astro' }`
+- `src/pages/api/keystatic/[...params].ts` — custom API route wrapping `makeGenericAPIRouteHandler` directly (required because Astro v6 removed `locals.runtime.env` which Keystatic's official adapter relies on)
 
 ---
 
@@ -302,6 +303,8 @@ docs/
 12. **Content-driven sections use `getCollection`** — Services, Downloads, Forms, Testimonials, and Partners pull from collections rather than hardcoded arrays. Language filtering uses the `lang` field (`item.data.lang === lang`).
 13. **Testimonials use `item.body`** — The `.rendered?.html` property causes a `toString` crash in Astro content collections; raw `item.body` is used instead.
 14. **OG images per language** — Language-specific OG images are defined in `[lang]/index.astro` (`/images/og-pl.jpg`, `/images/og-en.jpg`, `/images/og-de.jpg`).
+15. **Keystatic uses GitHub storage in production** — Local `storage: 'local'` was replaced with `storage: { kind: 'github', repo: 'Methedrone/igawo-astro' }`. Three Cloudflare Worker secrets are required: `KEYSTATIC_SECRET`, `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`.
+16. **Custom Keystatic API route required for Astro v6** — The official `@keystatic/astro/api` handler reads secrets from `context.locals.runtime.env`, which Astro v6 removed (it now throws an Error). A custom wrapper at `src/pages/api/keystatic/[...params].ts` imports `env` from `cloudflare:workers` and passes secrets explicitly to `makeGenericAPIRouteHandler`.
 
 ---
 
@@ -337,6 +340,12 @@ docs/
 3. Use `getEntry('pages', pageIdMap[lang])` to fetch SEO description
 4. Add slugs to `slugTranslations` in `src/i18n/utils.ts` if the page appears in nav/footer
 5. Add nav label keys to `src/i18n/ui.ts`
+
+### Keystatic CMS (content editing)
+- **Production:** Go to `https://igawo.pl/keystatic/` → GitHub OAuth login → edit content directly in the repo.
+- **Local dev:** Run `bun run astro dev` → go to `http://localhost:4321/keystatic/` → content is read from local `.md` files.
+- **Never put secrets in `keystatic.config.tsx`** — They are injected at runtime via Cloudflare Worker secrets.
+- **If Keystatic API returns 500** — Verify Cloudflare secrets exist: `npx wrangler secret list --name igawo-astro`
 
 ---
 
